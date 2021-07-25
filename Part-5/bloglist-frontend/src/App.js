@@ -1,6 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react'
+//import React, { useState, useRef } from 'react'
+
+
 import Blog from './components/Blog'
 import Notification from './components/Notification'
+import BlogForm from './components/Blogform'
 import blogService from './services/blogs'
 import loginService from './services/login'
 import './index.css'
@@ -28,9 +32,9 @@ const App = () => {
         setUsername('')
         setPassword('')
       } catch (exception) {
-        setErrorMessage('Wrong credentials')
+        //setErrorMessage('Wrong credentials')
         setTimeout(() => {
-          setErrorMessage(null)
+          //setErrorMessage(null)
         }, 5000)
       }
     }
@@ -57,8 +61,8 @@ const App = () => {
             />
         </div>
 
-        <button type="submit">login</button>
-      </form>
+       <button type="submit">login</button>
+     </form>
   )
 
   const addBlog = (blogObject) => {
@@ -72,7 +76,7 @@ const App = () => {
   }
 
   const blogFormRef = useRef()
-  const BlogForm = () => (
+  const blogForm = () => (
     <Togglable buttonLabel="new note" ref={blogFormRef}>
       <BlogForm createBlog = {addBlog} />
     </Togglable>
@@ -115,7 +119,7 @@ const App = () => {
       <button onClick={logout}>Log out</button>
       </div>
 
-      {BlogForm()}
+      {blogForm()}
 
       </div>
       }

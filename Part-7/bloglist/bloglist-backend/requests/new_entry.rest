@@ -1,0 +1,11 @@
+POST http://localhost:3001/api/blogentries
+content-type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImxvbCIsImlkIjoiNjA3YzJhM2I1NWM0OTM5YjU1NWQ5ZmU5IiwiaWF0IjoxNjE4NzU2NTg4fQ.gb78uH33lE3359znvDeig-9xrzORweWQWFjVnDhgrO4
+
+{
+"title": "Blog with Token",
+"author": "Edsger W. Dijkstra",
+"url": "https://reactpatterns.com/",
+"likes": 12,
+"userId": "607c2a3b55c4939b555d9fe9"
+}
