@@ -3,43 +3,31 @@ import React, { useState } from 'react'
 import Authors from './components/Authors'
 import Books from './components/Books'
 import NewBook from './components/NewBook'
-import { gql, useQuery } from '@apollo/client';
+import { useQuery, useMutation } from '@apollo/client';
+import { ALL_AUTHORS, ALL_BOOKS, CREATE_BOOK, EDIT_BIRTHYEAR } from './queries';
 
-const ALL_AUTHORS = gql`
-query {
-  allAuthors {
-    name
-    born
-    bookCount
-  }
-}
-`
-const ALL_BOOKS = gql`
-query {
-  allBooks {
-    title
-    author
-    published
-  }
-}
-`
 const App = () => {
   const [page, setPage] = useState('authors')
 
   const resultAuthors = useQuery(ALL_AUTHORS)
   const resultBooks = useQuery(ALL_BOOKS)
-  console.log(resultAuthors.data)
-  console.log(resultBooks.data)
+  const resultCreateBook = useMutation(CREATE_BOOK, {
+    refetchQueries: [
+      {query: ALL_AUTHORS},
+      {query: ALL_BOOKS}
+    ]
+  })
+  const resultChangeBirthYear = useMutation(EDIT_BIRTHYEAR, {
+    refetchQueries: [
+      {query: ALL_AUTHORS}
+    ]
+  })
 
   if (resultAuthors.loading || resultBooks.loading) {
     return <div>loading ...</div>
   }
   return (
     <div>
-
-      {/* <div>
-        {result.data.allAuthors.map(a => a.name).join(", ")}
-      </div> */}
 
       <div>
         <button onClick={() => setPage('authors')}>authors</button>
@@ -50,6 +38,7 @@ const App = () => {
       <Authors
         show={page === 'authors'}
         authors = {resultAuthors.data.allAuthors}
+        changeBirthYear = {resultChangeBirthYear}
       />
 
       <Books
@@ -59,6 +48,7 @@ const App = () => {
 
       <NewBook
         show={page === 'add'}
+        addBook = {resultCreateBook}
       />
 
     </div>
