@@ -1,8 +1,0 @@
-{
-  "dependencies": {
-    "redux": "^4.1.0"
-  },
-  "devDependencies": {
-    "deep-freeze": "^0.0.1"
-  }
-}
