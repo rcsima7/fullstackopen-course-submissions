@@ -147,6 +147,7 @@ const typeDefs = gql`
     username: String!
     books: [Book]
     id: ID!
+    favoriteGenre: String!
   }
   type Token {
     value: String!
@@ -154,7 +155,7 @@ const typeDefs = gql`
   type Query {
     bookCount: Int!
     authorCount: Int!
-    allBooks: [Book]
+    allBooks(genre: String): [Book]
     allAuthors: [Author!]!
     findAuthor(name: String!): Author
     me: User
@@ -175,6 +176,7 @@ const typeDefs = gql`
     ): Book
     createUser(
       username: String!
+      favoriteGenre: String
     ): User
     login(
       username: String!
@@ -182,6 +184,9 @@ const typeDefs = gql`
     ): Token
     addBookToUser(
       title: String!
+    ): User
+    addGenreToUser(
+      favoriteGenre: String!
     ): User
   }
 `
@@ -225,7 +230,13 @@ const resolvers = {
     // },
 
     // allBooks with Mongoose:
-    allBooks: () => Book.find({}),
+    // allBooks: () => Book.find({}),
+    allBooks: (root, args) => {
+      if (!args.genre) {
+        return Book.find({})
+      }
+      return Book.find({genres: args.genre})
+    },
 
     // traditional author array:
     // allAuthors: () => authors,
@@ -315,13 +326,14 @@ const resolvers = {
         return book
     },
     createUser: async (root, args) => {
-      const user = new User({username: args.username})
-      return user.save()
-      .catch (error => {
+      const user = new User({username: args.username, favoriteGenre: args.favoriteGenre})
+      try { user.save() }
+      catch (error) {
         throw new UserInputError(error.message, {
           invalidArgs: args,
         })
-      })
+      }
+      return user
     },
     login: async (root, args) => {
       const user = await User.findOne({username: args.username})
@@ -346,6 +358,20 @@ const resolvers = {
       }
       else {throw new UserInputError('book is already added to user')}
       
+      return currentUser
+    },
+    addGenreToUser: async (root, args, {currentUser}) => {
+      if (!currentUser) {
+        throw new AuthenticationError('not authenticated')
+      }
+      currentUser.favoriteGenre = args.favoriteGenre
+      try {
+        currentUser.save()
+      } catch (error) {
+        throw new UserInputError(error.message, {
+          invalidArgs: args,
+        })
+      }
       return currentUser
     }
   }

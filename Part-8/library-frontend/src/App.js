@@ -1,10 +1,11 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Authors from './components/Authors'
 import Books from './components/Books'
 import NewBook from './components/NewBook'
 import LoginForm from './components/Loginform'
-import { useQuery, useMutation, useApolloClient } from '@apollo/client';
-import { ALL_AUTHORS, ALL_BOOKS, CREATE_BOOK, EDIT_BIRTHYEAR } from './queries';
+import Recommendation from './components/Recommendation'
+import { useQuery, useMutation, useApolloClient, useLazyQuery } from '@apollo/client';
+import { ALL_AUTHORS, ALL_BOOKS, CREATE_BOOK, EDIT_BIRTHYEAR, FAV_GENRE } from './queries';
 
 const Notify = ({errorMessage}) => {
   if ( !errorMessage ) {
@@ -21,6 +22,8 @@ const App = () => {
   const [page, setPage] = useState('authors')
   const [token, setToken] = useState(null)
   const [errorMessage, setErrorMessage] = useState(null)
+  const [getFavoriteGenre, favoriteGenreResult] = useLazyQuery(FAV_GENRE)
+  const [favoriteGenre, setFavoriteGenre] = useState(null)
   const client = useApolloClient()
 
   const resultAuthors = useQuery(ALL_AUTHORS)
@@ -28,7 +31,9 @@ const App = () => {
   const resultCreateBook = useMutation(CREATE_BOOK, {
     refetchQueries: [
       {query: ALL_AUTHORS},
-      {query: ALL_BOOKS}
+      {query: ALL_BOOKS},
+      //{query: FAV_GENRE},
+      //{query: ALL_BOOKS({variables: {genre: favoriteGenreResult.data.me.favoriteGenre}})}
     ]
   })
 
@@ -51,6 +56,16 @@ const App = () => {
       {query: ALL_AUTHORS}
     ]
   })
+
+  const userFaveGenre = () => {
+    getFavoriteGenre()
+  }
+
+  useEffect( () => {
+    if (token && favoriteGenreResult.data) {
+      setFavoriteGenre(favoriteGenreResult.data.me.favoriteGenre)
+    }
+  },[favoriteGenreResult]) // eslint-disable-line
 
   if (resultAuthors.loading || resultBooks.loading) {
     return <div>loading ...</div>
@@ -85,12 +100,14 @@ const App = () => {
       </div>
     )
   }
+
   return (
     <div>
 
       <div>
         <button onClick={() => setPage('authors')}>authors</button>
         <button onClick={() => setPage('books')}>books</button>
+        <button onClick={() => {setPage('recommendation'); userFaveGenre(); }}>recommendation</button>
         <button onClick={() => setPage('add')}>add book</button>
         <button onClick={() => logout()}>logout</button>
 
@@ -113,6 +130,11 @@ const App = () => {
         show={page === 'add'}
         addBook = {resultCreateBook}
         setPage = {setPage}
+      />
+
+      <Recommendation
+        show={page === 'recommendation'}
+        genre = {favoriteGenre}
       />
 
     </div>
