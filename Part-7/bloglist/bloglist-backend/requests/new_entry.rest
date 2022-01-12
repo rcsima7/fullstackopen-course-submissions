@@ -1,11 +1,11 @@
 POST http://localhost:3001/api/blogentries
 content-type: application/json
-Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImxvbCIsImlkIjoiNjA3YzJhM2I1NWM0OTM5YjU1NWQ5ZmU5IiwiaWF0IjoxNjE4NzU2NTg4fQ.gb78uH33lE3359znvDeig-9xrzORweWQWFjVnDhgrO4
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImhpIiwiaWQiOiI2MWQyY2I3NGE3NGFhOTNkYWE2ZjU3NzYiLCJpYXQiOjE2NDEyMTU4MDMsImV4cCI6MTY0MTIxOTQwM30._x5T0rMQnklXt8joSnFibreBNq2fIZ3jvzwJIz9i8m0
 
 {
-"title": "Blog with Token",
-"author": "Edsger W. Dijkstra",
+"title": "Lunch",
+"author": "Chef",
 "url": "https://reactpatterns.com/",
-"likes": 12,
-"userId": "607c2a3b55c4939b555d9fe9"
+"likes": 1,
+"userId": "61d2cb74a74aa93daa6f5776"
 }

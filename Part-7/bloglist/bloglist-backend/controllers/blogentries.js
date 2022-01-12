@@ -2,6 +2,7 @@ const blogRouter = require('express').Router()
 const blogentry = require('../models/blogentry')
 const Blogentry = require('../models/blogentry')
 const User = require('../models/user')
+const Comment = require('../models/comment')
 const jwt = require('jsonwebtoken')
 
 blogRouter.get('/', async (request, response, next) => {
@@ -61,6 +62,7 @@ blogRouter.post('/', async (request, response, next) => {
     }  
     
     const user = await User.findById(decodedToken.id)
+    console.log(user)
     //const user = await User.findById(body.userId)
 
     const blogentry = new Blogentry({
@@ -91,6 +93,31 @@ blogRouter.put('/:id', async (request, response, next) => {
     try {
     const updatedEntry = await Blogentry.findByIdAndUpdate(request.params.id, blogentry, {new: true})
     response.json(updatedEntry)
+    } catch(exception) {
+        next(exception)
+    }
+})
+
+blogRouter.post('/:id/comments', async (request, response, next) => {
+    const body = request.body
+
+    if (!body.comment) {
+        return response.status(400).json({
+            error: 'content missing'
+        })
+    }
+
+    const blogentry = await Blogentry.findById(request.params.id)
+    const comment = new Comment({
+        comment: body.comment,
+        blogEntry: blogentry._id
+    })
+
+    try {
+        const savedComment = await comment.save()
+        blogentry.comments = blogentry.comments.concat(savedComment._id)
+        await blogentry.save()
+        response.json(savedComment)
     } catch(exception) {
         next(exception)
     }
