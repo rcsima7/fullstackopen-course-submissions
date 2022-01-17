@@ -1,20 +1,19 @@
 import blogService from '../services/blogs'
 
-const blogPostReducer = (state = [], action) => {
+const singleBlogPostReducer = (state = null, action) => {
     switch (action.type) {
-      case 'NEWBLOG':
-        return [...state, action.data]
-      case 'INIT_BLOGS':
+      case 'GET_BLOG':
         return action.data
-      case 'ADDLIKE':
-        return state.map(i => i.id === action.data.id ? {...i,likes: action.data.likes} : i)
-      case 'DELETE':
-        return action.data[0] === 204
-          ? state.filter(i => i.id !== action.data[1])
-          : state
-      case 'NEW_COMMENT':
-        // return state.map(i => i.id === action.data.id ? {...i, comments: i.comments.push(action.data.comment)} : i)
-        return state.map(i => i.id === action.data.blogEntry ? {...i, comments: [...i.comments, action.data]} : i)
+      // case 'INIT_BLOGS':
+      //   return action.data
+      // case 'ADDLIKE':
+      //   return state.map(i => i.id === action.data.id ? {...i,likes: action.data.likes} : i)
+      // case 'DELETE':
+      //   return action.data[0] === 204
+      //     ? state.filter(i => i.id !== action.data[1])
+      //     : state
+      // case 'NEW_COMMENT':
+      //   return state.map(i => i.id === action.data.id ? {...i, comments: i.comments.push(action.data.comment)} : i)
       default:
         return state
     }
@@ -33,11 +32,9 @@ const blogPostReducer = (state = [], action) => {
   export const addNewComment = (blogObject, commentObject) => {
     return async dispatch => {
       const newComment = await blogService.addComment(blogObject, commentObject)
-      // console.log('newComment data', newComment)
       dispatch({
         type: 'NEW_COMMENT',
         data: newComment
-        // data: [newComment.comment, blogObject.id]
       })
     }
   }
@@ -62,12 +59,12 @@ const blogPostReducer = (state = [], action) => {
     }
   }
 
-  export const initializeBlogs = () => {
+  export const getBlog = (blogObject) => {
     return async dispatch => {
-      const blogs = await blogService.getAll()
+      const blog = await blogService.getBlog(blogObject)
         dispatch({
-        type: 'INIT_BLOGS',
-        data: blogs,
+        type: 'GET_BLOG',
+        data: blog,
         })
       }
     // return {
@@ -76,4 +73,4 @@ const blogPostReducer = (state = [], action) => {
     // }
   }
 
-  export default blogPostReducer
+  export default singleBlogPostReducer

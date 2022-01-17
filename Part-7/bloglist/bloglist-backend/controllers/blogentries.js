@@ -10,6 +10,7 @@ blogRouter.get('/', async (request, response, next) => {
     try {
     const blogEntries = await Blogentry
     .find({}).populate('user', {username: 1, name: 1})
+    .find({}).populate('comments', {comment: 1 })
     response.json(blogEntries)
     } catch(exception) {
         next(exception)

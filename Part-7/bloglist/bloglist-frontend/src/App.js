@@ -1,24 +1,14 @@
 import React, { useEffect } from 'react'
-//import ReactDOM from 'react-dom'
 import store from './store'
 import { useSelector, useDispatch } from 'react-redux'
-//import { useDispatch } from 'react-redux'
 import { BrowserRouter as Router, Switch, Route, Link, useParams } from "react-router-dom"
 
-// import { addNotification, deleteNotification } from './reducers/notificationReducer'
-import { initializeBlogs } from './reducers/blogPostReducer'
+import { initializeBlogs, addNewComment } from './reducers/blogPostReducer'
 import { initializeUsers } from './reducers/userViewReducer'
-// import { addUser, deleteUser } from './reducers/userReducer'
 
-// import Blog from './components/Blog'
-// import User from './components/User'
 import LoginForm from './components/LoginForm'
 import Notification from './components/Notification'
-// import BlogForm from './components/Blogform'
-// import blogService from './services/blogs'
-// import loginService from './services/login'
 import './index.css'
-// import Togglable from './components/Togglable'
 import Users from './components/Users'
 import User from './components/User'
 import Blogs from './components/Blogs'
@@ -47,9 +37,10 @@ const App = () => {
     dispatch(initializeBlogs())
    },[dispatch])
 
-  useEffect(() => {
-    dispatch(initializeUsers())
-   },[dispatch])
+   useEffect(() => {
+     dispatch(initializeUsers())
+    },[dispatch])
+  
 
   console.log(store.getState())
   const blogs = useSelector(state => state.blogs)

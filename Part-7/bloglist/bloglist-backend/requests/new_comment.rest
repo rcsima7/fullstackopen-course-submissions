@@ -3,6 +3,6 @@ content-type: application/json
 # Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImhpIiwiaWQiOiI2MWQyY2I3NGE3NGFhOTNkYWE2ZjU3NzYiLCJpYXQiOjE2NDEyMTU4MDMsImV4cCI6MTY0MTIxOTQwM30._x5T0rMQnklXt8joSnFibreBNq2fIZ3jvzwJIz9i8m0
 
 {
-"comment": "Interesting",
+"comment": "Cheers",
 "blogEntry": "607aa7fbbfd9f5765a335f01"
 }

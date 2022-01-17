@@ -1,13 +1,21 @@
-import React from 'react'
+import React, { useEffect } from 'react'
+import CommentForm from './Commentform'
 import { increaseLike, deleteBlogPost } from '../reducers/blogPostReducer'
 import { useDispatch } from 'react-redux'
 import { useParams } from "react-router-dom"
+import { initializeBlogs } from '../reducers/blogPostReducer'
 
 // const Blog = ({ blog }) => {
 const Blog = ({ blogs }) => {
   const dispatch = useDispatch()
+
+  // useEffect(() => {
+  //   dispatch(initializeBlogs())
+  // },[dispatch])
+
   const id = useParams().id
   const blog = blogs.find(n => n.id === id)
+  console.log('blogs.find', blog)
 
   if (!blog) {
     console.log('blog not being rendered')
@@ -15,7 +23,6 @@ const Blog = ({ blogs }) => {
   }
 
   return (
-  // <li className='blog'>
   <div>
    <h2> {blog.title} </h2>
     author: {blog.author} <br/>
@@ -25,8 +32,18 @@ const Blog = ({ blogs }) => {
       Like</button> <br/>
     <button onClick={() => dispatch(deleteBlogPost(blog))}>
       Delete</button>
+    <br/> <br/>
+    <CommentForm blogObject={blog}/>
+    <h3>Comments</h3>
+    <ul>
+      {blog.comments.map(b =>
+        <li key={b.id}>
+          {b.comment}
+        </li>
+        )
+      }
+    </ul>
   </div>
-  // </li>
 )}
 
 export default Blog
