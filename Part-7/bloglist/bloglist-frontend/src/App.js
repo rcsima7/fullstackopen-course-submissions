@@ -175,7 +175,7 @@ const App = () => {
 
 
   return (
-    <div>
+    <div className='container'>
       <h2>Welcome to the Blog</h2>
       {/* <Notification message={store.getState()}/> */}
       <Notification message={notifications}/>

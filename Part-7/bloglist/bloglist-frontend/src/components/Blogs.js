@@ -1,23 +1,30 @@
 import React from 'react'
 // import Blog from './Blog'
-import { Link } from "react-router-dom"
-
+import { Link } from 'react-router-dom'
+import { Table } from 'react-bootstrap'
 
 const Blogs = ({ list }) => {
   return (
     <div>
       <h2>Blogs</h2>
-      <ul>
+      <Table striped>
+        <tbody>
+      {/* <ul> */}
         {list.map(li =>
           // <Blog key={li.id} blog={li}/>
-          <li key={li.id}>
+          <tr key={li.id}>
+            <td>
+          {/* <li key={li.id}> */}
             <Link to={`/blogentries/${li.id}`}>
               {li.title}
             </Link>
-          </li>
+            </td>
+            </tr>
+          // </li>
         )}
-      </ul>
-      
+      {/* </ul>          */}
+      </tbody>
+      </Table>
     </div>
   )
 }

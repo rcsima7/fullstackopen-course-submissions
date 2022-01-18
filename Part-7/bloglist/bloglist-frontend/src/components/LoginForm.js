@@ -1,14 +1,13 @@
-import React, { useState, useRef, useEffect} from 'react'
-import {useDispatch, useSelector} from 'react-redux'
+import React, { useState, useRef, useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import loginService from '../services/login'
 import blogService from '../services/blogs'
 import { addUser, deleteUser } from '../reducers/userReducer'
 import { addNotification, deleteNotification } from '../reducers/notificationReducer'
 import { addNewBlog } from '../reducers/blogPostReducer'
+import { Form, Button } from 'react-bootstrap'
 import Togglable from './Togglable'
 import BlogForm from './Blogform'
-
-
 
 const LoginForm = () => {
 
@@ -52,29 +51,34 @@ const LoginForm = () => {
   }
 
   const login = () => (
-    <form onSubmit={handleLogin}>
-        <div>
-          username
-            <input
+    <Form onSubmit={handleLogin}>
+        {/* <div> */}
+        <Form.Group>
+          <Form.Label>username:</Form.Label>
+            <Form.Control
+            // <input
               type="text"
               value={username}
               name="Username"
               onChange={({ target }) => setUsername(target.value)}
             />
-        </div>
+        {/* </div> */}
 
-        <div>
-          password
-            <input
+        {/* <div> */}
+          <Form.Label>password:</Form.Label>
+            {/* <input */}
+            <Form.Control
               type="password"
               value={password}
               name="Password"
               onChange={({ target }) => setPassword(target.value)}
             />
-        </div>
-
-       <button type="submit">login</button>
-     </form>
+        {/* </div> */}
+       <Button variant='primary' type='submit'>
+         login
+       </Button>
+      </Form.Group>
+     </Form>
   )
 
   const addBlog = (blogObject) => {
@@ -86,7 +90,7 @@ const LoginForm = () => {
           dispatch(deleteNotification())
         }, 5000)
   }
-    
+
   const blogFormRef = useRef()
   const blogForm = () => (
     <Togglable buttonLabel="new note" ref={blogFormRef}>
@@ -96,7 +100,9 @@ const LoginForm = () => {
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser')
-    if (loggedUserJSON !== "null") {
+    console.log('loggedUserJSON', loggedUserJSON)
+    if (loggedUserJSON !== null) {
+      console.log('executing existing user')
       const user = JSON.parse(loggedUserJSON)
       setUser(user)
       dispatch(addUser(user))
@@ -124,9 +130,9 @@ const LoginForm = () => {
       <div>
         <div className='loginMessage'>
           {user.name} logged-in
-          <button onClick={logout}>
+          <Button variant='primary' onClick={logout}>
             Log out
-          </button>
+          </Button>
         </div>
       {blogForm()}
     </div>
